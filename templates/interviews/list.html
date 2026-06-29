@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Interview Sessions{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Interview Preparation</h1>
+  <a class="btn" href="{% url 'interviews:create' %}">Create Mock Session</a>
+</section>
+
+<section class="card">
+  {% if sessions %}
+    <table class="table">
+      <thead>
+        <tr><th>Target Role</th><th>Difficulty</th><th>Created</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for session in sessions %}
+          <tr>
+            <td>{{ session.target_role }}</td>
+            <td>{{ session.get_difficulty_display }}</td>
+            <td>{{ session.created_at|date:"M d, Y" }}</td>
+            <td><a href="{% url 'interviews:session_detail' session.pk %}">Open</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="muted">No interview sessions yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

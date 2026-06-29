@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Interview Session{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>{{ session.target_role }}</h1>
+  <p class="muted">Difficulty: {{ session.get_difficulty_display }} • {{ questions|length }} questions</p>
+</section>
+
+<section class="grid">
+  {% for question in questions %}
+    <article class="card">
+      <p class="muted">{{ question.get_question_type_display }}</p>
+      <h3>{{ question.question_text }}</h3>
+      {% if question.response %}
+        <p><strong>Score:</strong> {{ question.response.overall_score }}%</p>
+        <p class="muted">{{ question.response.feedback|truncatechars:140 }}</p>
+      {% endif %}
+      <a class="btn btn-secondary" href="{% url 'interviews:answer' question.pk %}">
+        {% if question.response %}Review Answer{% else %}Answer Question{% endif %}
+      </a>
+    </article>
+  {% endfor %}
+</section>
+{% endblock %}

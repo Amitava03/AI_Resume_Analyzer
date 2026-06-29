@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Answer Question{% endblock %}
+
+{% block content %}
+<section class="card">
+  <p class="muted">{{ question.get_question_type_display }}</p>
+  <h2>{{ question.question_text }}</h2>
+
+  <form method="post" style="margin-top: 1rem;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn" type="submit">Submit for AI Feedback</button>
+  </form>
+
+  {% if response %}
+  <section style="margin-top: 1.5rem;">
+    <h3>AI Feedback</h3>
+    <div class="score-grid">
+      <div class="score-box"><span>{{ response.confidence_score }}</span>Confidence</div>
+      <div class="score-box"><span>{{ response.relevance_score }}</span>Relevance</div>
+      <div class="score-box"><span>{{ response.completeness_score }}</span>Completeness</div>
+      <div class="score-box"><span>{{ response.overall_score }}</span>Overall</div>
+    </div>
+    <p>{{ response.feedback }}</p>
+    <h4>Suggestions</h4>
+    <ul>{% for s in response.suggestions %}<li>{{ s }}</li>{% endfor %}</ul>
+  </section>
+  {% endif %}
+</section>
+{% endblock %}

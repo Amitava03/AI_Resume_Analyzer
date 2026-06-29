@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Job Match{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Job Matching</h1>
+  <p class="muted">Compare <strong>{{ resume.title }}</strong> against a job description.</p>
+</section>
+
+<section class="grid grid-2">
+  <article class="card">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn" type="submit">Analyze Match</button>
+    </form>
+  </article>
+
+  {% if result %}
+  <article class="card">
+    <h3>{{ result.job_title }}</h3>
+    <p class="score">{{ result.compatibility_score }}% match</p>
+    <p>{{ result.summary }}</p>
+    <h4>Matched Skills</h4>
+    <ul class="chip-list">{% for s in result.matched_skills %}<li class="chip">{{ s }}</li>{% empty %}<li class="muted">None detected</li>{% endfor %}</ul>
+    <h4>Missing Skills</h4>
+    <ul class="chip-list">{% for s in result.missing_skills %}<li class="chip">{{ s }}</li>{% empty %}<li class="muted">None detected</li>{% endfor %}</ul>
+    <h4>Recommendations</h4>
+    <ul>{% for r in result.recommendations %}<li>{{ r }}</li>{% endfor %}</ul>
+  </article>
+  {% endif %}
+</section>
+{% endblock %}

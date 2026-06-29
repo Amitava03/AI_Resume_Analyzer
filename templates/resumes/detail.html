@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}{{ resume.title }}{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>{{ resume.title }}</h1>
+  <p class="muted">Target role: {{ resume.target_role|default:"Not specified" }}</p>
+  <a class="btn btn-secondary" href="{% url 'resumes:job_match' resume.pk %}">Match Job Description</a>
+</section>
+
+{% if analysis %}
+<section class="grid grid-2">
+  <article class="card">
+    <h3>Resume Scores</h3>
+    <div class="score-grid">
+      <div class="score-box"><span>{{ analysis.quality_score }}</span>Quality</div>
+      <div class="score-box"><span>{{ analysis.ats_score }}</span>ATS</div>
+    </div>
+    <p style="margin-top: 1rem;">{{ analysis.summary }}</p>
+  </article>
+  <article class="card">
+    <h3>Extracted Skills</h3>
+    <ul class="chip-list">
+      {% for skill in analysis.skills %}
+        <li class="chip">{{ skill }}</li>
+      {% empty %}
+        <li class="muted">No skills detected automatically.</li>
+      {% endfor %}
+    </ul>
+  </article>
+</section>
+
+<section class="grid grid-2" style="margin-top: 1rem;">
+  <article class="card">
+    <h3>Strengths</h3>
+    <ul>
+      {% for item in analysis.strengths %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+  </article>
+  <article class="card">
+    <h3>Improvements</h3>
+    <ul>
+      {% for item in analysis.improvements %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+  </article>
+  <article class="card">
+    <h3>Keyword Suggestions</h3>
+    <ul class="chip-list">
+      {% for item in analysis.keyword_suggestions %}<li class="chip">{{ item }}</li>{% endfor %}
+    </ul>
+  </article>
+  <article class="card">
+    <h3>Grammar & Formatting</h3>
+    <ul>
+      {% for item in analysis.grammar_notes %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+  </article>
+</section>
+{% else %}
+<section class="card"><p class="muted">Analysis not available.</p></section>
+{% endif %}
+
+{% if job_matches %}
+<section class="card" style="margin-top: 1rem;">
+  <h3>Recent Job Matches</h3>
+  <table class="table">
+    <thead><tr><th>Role</th><th>Score</th><th>Date</th></tr></thead>
+    <tbody>
+      {% for match in job_matches %}
+        <tr>
+          <td>{{ match.job_title }}</td>
+          <td>{{ match.compatibility_score }}%</td>
+          <td>{{ match.created_at|date:"M d, Y" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+{% endblock %}

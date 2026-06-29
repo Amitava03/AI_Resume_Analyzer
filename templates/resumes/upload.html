@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Resume{% endblock %}
+
+{% block content %}
+<section class="card form-card">
+  <h2>Upload Resume</h2>
+  <p class="muted">Supported formats: PDF, DOCX (max 5 MB).</p>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn" type="submit">Upload & Analyze</button>
+  </form>
+</section>
+{% endblock %}

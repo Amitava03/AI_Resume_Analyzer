@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Profile</h1>
+  <p class="muted">Signed in as <strong>{{ user.username }}</strong> ({{ user.email }})</p>
+</section>
+{% endblock %}

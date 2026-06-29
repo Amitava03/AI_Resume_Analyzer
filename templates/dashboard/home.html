@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Career Guidance Dashboard</h1>
+  <p class="muted">Track resume quality, job readiness, and interview progress.</p>
+  {% if not ai_enabled %}
+    <div class="alert">OpenAI API key not configured. Heuristic analysis is active. Add <code>OPENAI_API_KEY</code> to <code>.env</code> for full AI features.</div>
+  {% endif %}
+</section>
+
+<section class="grid grid-3">
+  <article class="card">
+    <h3>Resumes</h3>
+    <p class="score">{{ resume_count }}</p>
+    <p class="muted">Uploaded resumes</p>
+    <a class="btn btn-secondary" href="{% url 'resumes:upload' %}">Upload Resume</a>
+  </article>
+  <article class="card">
+    <h3>Latest ATS Score</h3>
+    <p class="score">{% if latest_analysis %}{{ latest_analysis.ats_score }}%{% else %}—{% endif %}</p>
+    <p class="muted">Applicant tracking compatibility</p>
+  </article>
+  <article class="card">
+    <h3>Interview Readiness</h3>
+    <p class="score">{{ avg_interview_score }}%</p>
+    <p class="muted">Average mock interview score ({{ session_count }} sessions)</p>
+    <a class="btn btn-secondary" href="{% url 'interviews:create' %}">Start Mock Interview</a>
+  </article>
+</section>
+
+<section class="grid grid-2" style="margin-top: 1rem;">
+  <article class="card">
+    <h3>Career Recommendations</h3>
+    <ul>
+      {% for item in career_recommendations %}
+        <li><strong>{{ item.title }}:</strong> {{ item.detail }}</li>
+      {% endfor %}
+    </ul>
+  </article>
+  <article class="card">
+    <h3>Recent Job Matches</h3>
+    {% if recent_matches %}
+      <table class="table">
+        <thead>
+          <tr><th>Role</th><th>Match</th></tr>
+        </thead>
+        <tbody>
+          {% for match in recent_matches %}
+            <tr>
+              <td>{{ match.job_title }}</td>
+              <td>{{ match.compatibility_score }}%</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="muted">Run a job match from a resume detail page.</p>
+    {% endif %}
+  </article>
+</section>
+{% endblock %}

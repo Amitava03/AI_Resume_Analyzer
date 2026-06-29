@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}My Resumes{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>My Resumes</h1>
+  <a class="btn" href="{% url 'resumes:upload' %}">Upload New Resume</a>
+</section>
+
+<section class="card">
+  {% if resumes %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Target Role</th>
+          <th>Uploaded</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for resume in resumes %}
+          <tr>
+            <td>{{ resume.title }}</td>
+            <td>{{ resume.target_role|default:"—" }}</td>
+            <td>{{ resume.created_at|date:"M d, Y" }}</td>
+            <td><a href="{% url 'resumes:detail' resume.pk %}">View Analysis</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="muted">No resumes yet. Upload your first resume to begin.</p>
+  {% endif %}
+</section>
+{% endblock %}

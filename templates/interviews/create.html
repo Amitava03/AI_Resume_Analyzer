@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}New Interview Session{% endblock %}
+
+{% block content %}
+<section class="card form-card">
+  <h2>Mock Interview Setup</h2>
+  <p class="muted">Generate technical, behavioral, and HR questions tailored to your profile.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn" type="submit">Generate Questions</button>
+  </form>
+</section>
+{% endblock %}
