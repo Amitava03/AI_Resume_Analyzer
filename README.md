@@ -2,7 +2,7 @@
 
 A Django web application that helps job seekers analyze resumes, improve ATS compatibility, match job descriptions, and practice interviews with AI-generated feedback.
 
-## Features (MVP)
+## Features 
 
 - User registration and authentication
 - Resume upload (PDF/DOCX) with text extraction
